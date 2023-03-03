@@ -27,3 +27,15 @@ class MyMain {
 
 ```
 
+Outputs
+
+```terminal 
+Verbose: Test.main [line 127] : Verbose
+Info: Test.main [line 116] : Info
+Debug: Test.main [line 105] : Debug
+Message: Test.main [line 94] : Message
+Warning: Test.main [line 83] : Warning
+Error: Test.main [line 72] : Error
+Critical: Test.main [line 61] : Critical
+```
+
