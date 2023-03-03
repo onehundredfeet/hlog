@@ -7,21 +7,17 @@ Ultra simple, ultra lightweight logging library for Haxe
 ```haxe
 import log.Log;
 
-function test() {
-    // In order of level
-    critical('Critical failure, and throw');
-    error('Error message');
-    warning('Waring message');
-    message('Normal message, equivalent to regular trace');
-    debug('Some extra debugging information');
-    info('Even more info');
-    verbose('Info that borders on spew');
-}
-
-class MyMain {
+class Test {
     public static function main() {
         initLogging(VERBOSE);
-        test();
+         // In order of level
+        verbose('Info that borders on spew');
+        info('Even more info');
+        message('Normal message, equivalent to regular trace');
+        warning('Waring message');
+        debug('Some extra debugging information');
+        error('Error message');
+        critical('Critical failure, and throw');
     }
 }
 
@@ -30,12 +26,12 @@ class MyMain {
 Outputs
 
 ```terminal 
-Verbose: Test.main [line 127] : Verbose
-Info: Test.main [line 116] : Info
-Debug: Test.main [line 105] : Debug
-Message: Test.main [line 94] : Message
-Warning: Test.main [line 83] : Warning
-Error: Test.main [line 72] : Error
-Critical: Test.main [line 61] : Critical
+Verbose: Test.main [line 127] : Info that borders on spew
+Info: Test.main [line 116] : Even more info
+Message: Test.main [line 94] : Normal message, equivalent to regular trace
+Warning: Test.main [line 83] : Waring message
+Debug: Test.main [line 105] : Some extra debugging information
+Error: Test.main [line 72] : Error message
+Critical: Test.main [line 61] : Critical failure, and throw
 ```
 
