@@ -1,0 +1,4 @@
+--class-path .
+--class-path src
+--main Test
+--hl bin/test.hl

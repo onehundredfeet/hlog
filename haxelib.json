@@ -1,0 +1,13 @@
+{
+    "name"         :  "hlog",
+    "url"          :  "https://github.com/onehundredfeet/hl-hlog",
+    "license"      :  "MIT",
+    "tags"         :  ["logging"],
+    "description"  :  "Simple logging library for Haxe",
+    "version"      :  "1.0.0",
+    "classPath"    :  "src",
+    "releasenote"  :  "Initial work",
+    "contributors" :  ["onehundredfeet"],
+    "dependencies" :  {}
+}
+
