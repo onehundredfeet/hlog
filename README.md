@@ -1,6 +1,10 @@
-# hlog
+# Description
 Ultra simple, ultra lightweight logging library for Haxe
 
+# Features
+* Use like 'trace' - No objects to reference, just call the functions below.
+* Coloured messages - Very simple colourization for terminals
+* Performance - If the level is excluded, the string will not be evaluated, saving interpolation.
 
 # Usage
 
@@ -17,7 +21,7 @@ class Test {
         warning('Waring message');
         debug('Some extra debugging information');
         error('Error message');
-        critical('Critical failure, and throw');
+        critical('Critical failure');
     }
 }
 
@@ -32,6 +36,6 @@ Message: Test.main [line 94] : Normal message, equivalent to regular trace
 Warning: Test.main [line 83] : Waring message
 Debug: Test.main [line 105] : Some extra debugging information
 Error: Test.main [line 72] : Error message
-Critical: Test.main [line 61] : Critical failure, and throw
+Critical: Test.main [line 61] : Critical failure
 ```
 

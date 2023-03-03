@@ -1,6 +1,6 @@
 {
     "name"         :  "hlog",
-    "url"          :  "https://github.com/onehundredfeet/hl-hlog",
+    "url"          :  "https://github.com/onehundredfeet/hlog",
     "license"      :  "MIT",
     "tags"         :  ["logging"],
     "description"  :  "Simple logging library for Haxe",
