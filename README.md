@@ -17,5 +17,13 @@ function test() {
     info('Even more info');
     verbose('Info that borders on spew');
 }
+
+class MyMain {
+    public static function main() {
+        initLogging(VERBOSE);
+        test();
+    }
+}
+
 ```
 
