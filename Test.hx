@@ -1,7 +1,7 @@
 // this file is written in haxe
 package ;
 
-import log.Log;
+import hlog.Log;
 
 class Test {
     public static function main() {

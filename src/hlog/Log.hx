@@ -1,5 +1,6 @@
-package log;
+package hlog;
 
+import haxe.macro.Printer;
 import haxe.macro.Expr;
 using haxe.macro.ExprTools;
 using haxe.macro.PositionTools;
@@ -57,8 +58,8 @@ var logLevel = DEBUG;
 macro function critical(e:Expr):Expr {
     #if !hlog_no_critical
 	var pos = e.pos;
-	var x = macro log.Log.CRITICAL;
-	var eout = macro if (log.Log.logLevel.level >= log.Log.CRITICAL.level) trace($e, $x);
+	var x = macro hlog.Log.CRITICAL;
+	var eout = macro if (hlog.Log.logLevel.level >= hlog.Log.CRITICAL.level) trace($e, $x);
 	eout.pos = e.pos;
 	return eout;
     #end
@@ -68,8 +69,8 @@ macro function critical(e:Expr):Expr {
 macro function error(e:Expr):Expr {
     #if !hlog_no_error
 	var pos = e.pos;
-	var x = macro log.Log.ERROR;
-	var eout = macro if (log.Log.logLevel.level >= log.Log.ERROR.level) trace($e, $x);
+	var x = macro hlog.Log.ERROR;
+	var eout = macro if (hlog.Log.logLevel.level >= hlog.Log.ERROR.level) trace($e, $x);
 	eout.pos = e.pos;
 	return eout;
     #end
@@ -79,8 +80,8 @@ macro function error(e:Expr):Expr {
 macro function warning(e:Expr):Expr {
     #if !hlog_no_warning
 	var pos = e.pos;
-	var x = macro log.Log.WARNING;
-	var eout = macro if (log.Log.logLevel.level >= log.Log.WARNING.level) trace($e, $x);
+	var x = macro hlog.Log.WARNING;
+	var eout = macro if (hlog.Log.logLevel.level >= hlog.Log.WARNING.level) trace($e, $x);
 	eout.pos = e.pos;
 	return eout;
     #end
@@ -90,8 +91,8 @@ macro function warning(e:Expr):Expr {
 macro function message(e:Expr):Expr {
     #if !hlog_no_message
 	var pos = e.pos;
-	var x = macro log.Log.MESSAGE;
-	var eout = macro if (log.Log.logLevel.level >= log.Log.MESSAGE.level) trace($e, $x);
+	var x = macro hlog.Log.MESSAGE;
+	var eout = macro if (hlog.Log.logLevel.level >= hlog.Log.MESSAGE.level) trace($e, $x);
 	eout.pos = e.pos;
 	return eout;
     #end
@@ -101,8 +102,8 @@ macro function message(e:Expr):Expr {
 macro function debug(e:Expr):Expr {
     #if !hlog_no_debug
 	var pos = e.pos;
-	var x = macro log.Log.DEBUG;
-	var eout = macro if (log.Log.logLevel.level >= log.Log.DEBUG.level) trace($e, $x);
+	var x = macro hlog.Log.DEBUG;
+	var eout = macro if (hlog.Log.logLevel.level >= hlog.Log.DEBUG.level) trace($e, $x);
 	eout.pos = e.pos;
 	return eout;
     #end
@@ -112,8 +113,8 @@ macro function debug(e:Expr):Expr {
 macro function info(e:Expr):Expr {
     #if !hlog_no_info
 	var pos = e.pos;
-	var x = macro log.Log.INFO;
-	var eout = macro if (log.Log.logLevel.level >= log.Log.INFO.level) trace($e, $x);
+	var x = macro hlog.Log.INFO;
+	var eout = macro { if (hlog.Log.logLevel.level >= hlog.Log.INFO.level) trace($e, $x); };
 	eout.pos = e.pos;
 	return eout;
     #end
@@ -123,8 +124,8 @@ macro function info(e:Expr):Expr {
 macro function verbose(e:Expr):Expr {
     #if !hlog_no_verbose
 	var pos = e.pos;
-	var x = macro log.Log.VERBOSE;
-	var eout = macro if (log.Log.logLevel.level >= log.Log.VERBOSE.level) trace($e, $x);
+	var x = macro hlog.Log.VERBOSE;
+	var eout = macro if (hlog.Log.logLevel.level >= hlog.Log.VERBOSE.level) trace($e, $x);
 	eout.pos = e.pos;
 	return eout;
     #end
