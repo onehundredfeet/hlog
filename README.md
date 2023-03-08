@@ -3,6 +3,7 @@ Ultra simple, ultra lightweight logging library for Haxe
 
 # Features
 * Use like 'trace' - No objects to reference, just call the functions below.
+* Captures trace as well
 * Coloured messages - Very simple colourization for terminals
 * Performance - If the level is excluded, the string will not be evaluated, saving interpolation.
 
