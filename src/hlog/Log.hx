@@ -7,7 +7,7 @@ using haxe.macro.PositionTools;
 
 // TODO - Easier way for someone to customize without modifying this file
 // Feel free to modify these to your liking
-@:enum abstract LogColour(String) to String {
+enum abstract LogColour(String) to String {
 	var NONE = "\x1b[0m";
 	var RED ="\x1b[38;2;⟨200⟩;⟨20⟩;⟨20⟩m";
 	var GREEN = "\x1b[32m";
@@ -132,6 +132,13 @@ macro function verbose(e:Expr):Expr {
     return macro {};
 }
 
+function println( v : Dynamic ) {
+    #if sys
+    Sys.println(v);
+    #elseif js
+    js.html.Console.error(v);
+    #end
+}
 // TODO allow custom formatting
 function log_trace(v:Dynamic, ?infos:haxe.PosInfos) {
     if (infos != null) {
@@ -158,7 +165,7 @@ function log_trace(v:Dynamic, ?infos:haxe.PosInfos) {
                     }
                 }
                 else {
-                    Sys.println('Unknown paramter type: ${x}');
+                    println('Unknown paramter type: ${x}');
                 }
             }
         }
@@ -169,15 +176,15 @@ function log_trace(v:Dynamic, ?infos:haxe.PosInfos) {
             if (infos != null) {
 
                 if (className != null && methodName != null)
-                    Sys.println('${description}: ${className}.${methodName} [line ${infos.lineNumber}] : ${v}');
+                    println('${description}: ${className}.${methodName} [line ${infos.lineNumber}] : ${v}');
                 else
-                    Sys.println('${description}: ${fileName}[${infos.lineNumber}]: ${v}');
+                    println('${description}: ${fileName}[${infos.lineNumber}]: ${v}');
             } else {
-                Sys.println('${description}: ${v}');
+                println('${description}: ${v}');
             }
         }
     } else {
-        Sys.println(Std.string(v));
+        println(Std.string(v));
     }
 
 }
