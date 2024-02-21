@@ -136,7 +136,7 @@ function println( v : Dynamic ) {
     #if sys
     Sys.println(v);
     #elseif js
-    js.html.Console.error(v);
+    js.html.Console.log(v);
     #end
 }
 // TODO allow custom formatting
@@ -174,7 +174,6 @@ function log_trace(v:Dynamic, ?infos:haxe.PosInfos) {
             // custom trace function here
             var description = '${level.colour}${level.description}${Log.LogColour.NONE}';
             if (infos != null) {
-
                 if (className != null && methodName != null)
                     println('${description}: ${className}.${methodName} [line ${infos.lineNumber}] : ${v}');
                 else
@@ -186,7 +185,6 @@ function log_trace(v:Dynamic, ?infos:haxe.PosInfos) {
     } else {
         println(Std.string(v));
     }
-
 }
 
 function initLogging(maxlevel:LogLevel) {
