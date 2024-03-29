@@ -8,27 +8,35 @@ using haxe.macro.PositionTools;
 
 // TODO - Easier way for someone to customize without modifying this file
 // Feel free to modify these to your liking
-enum abstract LogColour(String) to String {
-	var NONE = "\x1b[0m";
-	var RED = "\x1b[38;2;⟨200⟩;⟨20⟩;⟨20⟩m";
-	var GREEN = "\x1b[32m";
-	var YELLOW = "\x1b[33m";
-	var BLUE = "\x1b[34m";
-	var MAGENTA = "\x1b[35m";
-	var CYAN = "\x1b[36m";
-	var WHITE = "\x1b[37m";
-	var BRIGHT_RED = "\x1b[38;2;⟨255⟩;⟨40⟩;⟨40⟩m";
-	var BRIGHT_GREEN = "\x1b[92m";
-	var BRIGHT_YELLOW = "\x1b[93m";
-	var BRIGHT_BLUE = "\x1b[94m";
-	var BRIGHT_MAGENTA = "\x1b[95m";
-	var BRIGHT_CYAN = "\x1b[38;2;⟨85⟩;⟨255⟩;⟨255⟩m";
-	var BRIGHT_WHITE = "\x1b[97m";
-	var BOLD = "\x1b[1m";
-	var UNDERLINE = "\x1b[4m";
-	var BLINK = "\x1b[5m";
-	var REVERSE = "\x1b[7m";
-	var HIDDEN = "\x1b[8m";
+
+
+
+class LogColour {
+	static inline function colourCode(r:Int, g:Int, b:Int):String {
+		return "\x1b[38;2;" + r + ";" + g + ";" + b + "m";
+		//return "\x1b[38;2;⟨" + r + "⟩;⟨" + g + "⟩;⟨" + b + "⟩m";
+	}
+
+	public static final NONE = "\x1b[0m";
+	public static final RED = colourCode(200, 20, 20);
+	public static final GREEN = "\x1b[32m";
+	public static final YELLOW = "\x1b[33m";
+	public static final BLUE = "\x1b[34m";
+	public static final MAGENTA = "\x1b[35m";
+	public static final CYAN = "\x1b[36m";
+	public static final WHITE = "\x1b[37m";
+	public static final BRIGHT_RED = colourCode(200, 40, 40);
+	public static final BRIGHT_GREEN = "\x1b[92m";
+	public static final BRIGHT_YELLOW = "\x1b[93m";
+	public static final BRIGHT_BLUE = "\x1b[94m";
+	public static final BRIGHT_MAGENTA = "\x1b[95m";
+	public static final BRIGHT_CYAN = colourCode(85, 255, 255); 
+	public static final BRIGHT_WHITE = "\x1b[97m";
+	public static final BOLD = "\x1b[1m";
+	public static final UNDERLINE = "\x1b[4m";
+	public static final BLINK = "\x1b[5m";
+	public static final REVERSE = "\x1b[7m";
+	public static final HIDDEN = "\x1b[8m";
 }
 
 class LogLevel {
@@ -47,7 +55,9 @@ class LogLevel {
 
 // TODO - Easier way for someone to customize without modifying this file
 // Feel free to modify these to your liking
-final CRITICAL = new LogLevel(-3, "Critical", true, '${LogColour.BOLD}${LogColour.BRIGHT_RED}');
+final ASSERT = new LogLevel(-5, "Assert", true, '${LogColour.BOLD}${LogColour.BRIGHT_RED}');
+final CRITICAL = new LogLevel(-4, "Critical", true, '${LogColour.BOLD}${LogColour.BRIGHT_RED}');
+final ENSURE = new LogLevel(-3, "Ensure", false, '${LogColour.BOLD}${LogColour.RED}');
 final ERROR = new LogLevel(-2, "Error", false, '${LogColour.BOLD}${LogColour.RED}');
 final WARNING = new LogLevel(-1, "Warning", false, LogColour.YELLOW);
 final MESSAGE = new LogLevel(0, "Message", false, LogColour.GREEN);
@@ -117,8 +127,10 @@ macro function info(e:Expr):Expr {
 	#if !hlog_no_info
 	var pos = e.pos;
 	var x = macro hlog.Log.INFO;
-	var eout = macro {if (hlog.Log.logLevel.level >= hlog.Log.INFO.level)
-		trace($e, $x);};
+	var eout = macro {
+		if (hlog.Log.logLevel.level >= hlog.Log.INFO.level)
+			trace($e, $x);
+	};
 	eout.pos = e.pos;
 	return eout;
 	#end
@@ -132,6 +144,41 @@ macro function verbose(e:Expr):Expr {
 	var eout = macro if (hlog.Log.logLevel.level >= hlog.Log.VERBOSE.level) trace($e, $x);
 	eout.pos = e.pos;
 	return eout;
+	#end
+	return macro {};
+}
+
+macro function assertf(e:Expr, msg:Expr):Expr {
+	#if !hlog_no_assert
+	var pos = e.pos;
+	var x = macro hlog.Log.ASSERT;
+	var ife = macro if (!($e)) {
+		trace($msg, $x);
+		throw $msg;
+	}
+	ife.pos = e.pos;
+
+	return ife;
+	#end
+	return macro {};
+}
+
+macro function ensuref(e:Expr, msg:Expr):Expr {
+	#if !hlog_no_assert
+	var pos = e.pos;
+	var x = macro hlog.Log.ASSERT;
+	var ife = macro switch (($e)) {
+		case true: true;
+		case false: {
+				trace($msg, $x);
+				false;
+			}
+	};
+
+	ife.pos = e.pos;
+	// var p = new haxe.macro.Printer();
+	// trace(p.printExpr(ife));
+	return ife;
 	#end
 	return macro {};
 }
@@ -170,11 +217,12 @@ function logTxt(v:Dynamic, level, ?infos:haxe.PosInfos) {
 }
 
 function logString(s:String) {
-    if (Log.txtFile != null) {
-        Log.txtFile.writeString(s + "\n");
-    }
-    println(s);
+	if (Log.txtFile != null) {
+		Log.txtFile.writeString(s + "\n");
+	}
+	println(s);
 }
+
 function logCallStack() {
 	var stack = haxe.CallStack.callStack();
 	for (i in 2...stack.length) {
@@ -191,11 +239,11 @@ function logCallStack() {
 					case Module(m):
 						logString('Module: ${m}');
 					case Method(classname, method):
-                        var columnStr = column != null ? ',${column}' : "";
+						var columnStr = column != null ? ',${column}' : "";
 						logString('Called from ${classname}.${method}(${file}[${line}${columnStr}])');
 					case LocalFunction(v):
 						logString('LocalFunction: ${v}');
-                    default:
+					default:
 				}
 			case Method(classname, method):
 				logString('Method: ${classname}.${method}');
@@ -257,7 +305,7 @@ function log_trace(v:Dynamic, ?infos:haxe.PosInfos) {
 		}
 		if (level.halt) {
 			logCallStack();
-            throw v;
+			throw v;
 		}
 	} else {
 		println(Std.string(v));
