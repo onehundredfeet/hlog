@@ -183,6 +183,23 @@ macro function ensuref(e:Expr, msg:Expr):Expr {
 	return macro {};
 }
 
+macro function ensure(e:Expr):Expr {
+	#if !hlog_no_assert
+	var pos = e.pos;
+	var s = e.toString();
+	var se : Expr = { expr : EConst(CString(s)), pos : e.pos};
+
+	var x = macro hlog.Log.ASSERT;
+	var ife = macro if (!($e)) {
+		throw $se;
+	};
+
+	ife.pos = e.pos;
+	return ife;
+	#end
+	return macro {};
+}
+
 function println(v:Dynamic) {
 	#if sys
 	Sys.println(v);
